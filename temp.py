@@ -1,20 +1,19 @@
 import os
-from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from dotenv import load_dotenv
+from langchain_nvidia_ai_endpoints import NVIDIAEmbeddings
+
 load_dotenv()
 
-client = ChatNVIDIA(
-    model="nvidia/nemotron-3.5-lightning-30b-a3b",
-    api_key=os.environ["NVIDIA_API_KEY"],
-    temperature=0.7,
-    max_tokens=2048,
+embeddings = NVIDIAEmbeddings(
+    model="nvidia/nemotron-3-embed-1b",
+    api_key=os.environ["EMBEDDING_API_KEY"],
 )
 
-def ask_llm(query: str) -> str:
-    response = client.invoke(query)
-    return response.content
+text = "I am Onkar"
 
-# Example usage
-query = "Explain RAG in simple terms."
-answer = ask_llm(query)
-print(answer)
+ans = embeddings.embed_query(text)
+
+print("=" * 60)
+print("Embedding:", ans)
+print("=" * 60)
+print("Number of dimensions:", len(ans))
